@@ -54,7 +54,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Rejected House Applications</h1>
+                    <h1 class="page-header">Rejected Apartment Applications</h1>
                     <div class="floordivider"></div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>House Name</th>
+                                        <th>Apartment Name</th>
                                         <th>Address</th>
                                         <th>Contact Person</th>
                                         <th>Contact Number</th>
@@ -92,7 +92,7 @@
                                 <tbody>
                                     <tr class="odd gradeX">
                                         <td>1</td>
-                                        <td>housename</td>
+                                        <td>Apartmentname</td>
                                         <td>chuchu st. chenes, chuvanes city</td>
                                         <td>Chichi Ria</td>
                                         <td>09653985214</td>
@@ -134,13 +134,13 @@
           <div class="modal-content">
             <div class = "modal-header">
               <button type="button" class = "close" data-dismiss ="modal"> &times;</button>
-                    <h4 class ="modal-title"> House Details </h4>
+                    <h4 class ="modal-title"> Apartment Details </h4>
                   </div>
                   <div class="modal-body">
                     <div class="panel-body">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#dhouse" data-toggle="tab" aria-expanded="false">House</a>
+                            <li class="active"><a href="#dhouse" data-toggle="tab" aria-expanded="false">Apartment</a>
                             </li>
                             <li class=""><a href="#dhost" data-toggle="tab" aria-expanded="true">Host</a>
                             </li>
@@ -148,10 +148,10 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="tab-pane fade active in" id="dhouse">
-                                <center><br><h4>House Information</h4></center>
+                                <center><br><h4>Apartment Information</h4></center>
                                 <form>    
                                     <center>
-                                            <img src="" alt="House Picture">
+                                            <img src="" alt="Apartment Picture">
                                     </center>
                                     <form>
                                         <div class="form-group">
@@ -159,7 +159,7 @@
                                             <label class="form-control"></label>
                                         </div>
                                         <div class="form-group">
-                                            <label>House Name:</label>
+                                            <label>Apartment Name:</label>
                                             <label class="form-control"></label>
                                         </div>
                                         <div class="form-group">
@@ -223,13 +223,13 @@
           <div class="modal-content">
             <div class = "modal-header">
               <button type="button" class = "close" data-dismiss ="modal"> &times;</button>
-                    <h4 class ="modal-title"> Edit House Details </h4>
+                    <h4 class ="modal-title"> Edit Apartment Details </h4>
                   </div>
                   <div class="modal-body">
                     <div class="panel-body">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#ehouse" data-toggle="tab" aria-expanded="false">House</a>
+                            <li class="active"><a href="#ehouse" data-toggle="tab" aria-expanded="false">Apartment</a>
                             </li>
                             <li class=""><a href="#ehost" data-toggle="tab" aria-expanded="true">Host</a>
                             </li>
@@ -237,10 +237,10 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="tab-pane fade active in" id="ehouse">
-                                <center><br><h4>House Information</h4></center>
+                                <center><br><h4>Apartment Information</h4></center>
                                 <form>    
                                     <center>
-                                            <img src="users/defaultprofpic.jpg" alt="House Picture">
+                                            <img src="users/defaultprofpic.jpg" alt="Apartment Picture">
                                     </center>
                                     <form>
                                         <div class="form-group">
@@ -248,8 +248,8 @@
                                             <label class="form-control"></label>
                                         </div>
                                         <div class="form-group">
-                                            <label>House Name:</label>
-                                            <input type="text" class="form-control" placeholder="House Name">
+                                            <label>Apartment Name:</label>
+                                            <input type="text" class="form-control" placeholder="Apartment Name">
                                         </div>
                                         <div class="form-group">
                                             <label>Address:</label>
@@ -364,14 +364,14 @@
                     <h4 class ="modal-title"> Confirmation </h4>
                 </div>
                 <div class="modal-body">
-                    &emsp; &emsp; By clicking yes, this house will be deleted and removed from the platform.
+                    &emsp; &emsp; By clicking yes, this apartment will be deleted and removed from the platform.
                     <form>
                         <div class="form-group">
                             <label> ID: </label>
                             <label class="form-control" placeholder="Room name"></label>
                         </div>
                         <div class="form-group">
-                            <label> House Name: </label>
+                            <label> Apartment Name: </label>
                             <label class="form-control" placeholder="Rent rate"></label>
                         </div>
                     </form>

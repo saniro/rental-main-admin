@@ -54,7 +54,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Current Apartments</h1>
+                    <h1 class="page-header">New Apartment Applications</h1>
                     <div class="floordivider"></div>
                 </div>
             </div>
@@ -92,16 +92,16 @@
                                 <tbody>
                                     <tr class="odd gradeX">
                                         <td>1</td>
-                                        <td>Apartmentname</td>
+                                        <td>apartmentname</td>
                                         <td>chuchu st. chenes, chuvanes city</td>
                                         <td>Chichi Ria</td>
                                         <td>09653985214</td>
                                         <td>chichiria@gmail.com</td>
                                         <td class="center">
                                             <center>
-                                                <button data-toggle="tooltip" title="View Full Details" class="btn btn-info" id="btnViewDetails"><span class="fa fa-file-text-o"></span></button>
-                                                <button data-toggle="tooltip" title="Edit Details" class="btn btn-success" id="btnEdit"><span class="fa fa-edit"></span></button>
-                                                <button data-toggle="tooltip" title="Delete" class="btn btn-danger" id="btnDelete"><span class="glyphicon glyphicon-remove"></span></button>
+                                                <button data-toggle="tooltip" title="View Details and See More Available Actions Here" class="btn btn-info" id="btnViewDetails"><span class="fa fa-file-text-o"></span></button>
+                                                <!-- <button data-toggle="tooltip" title="Edit Details" class="btn btn-success" id="btnEdit"><span class="fa fa-edit"></span></button>
+                                                <button data-toggle="tooltip" title="Delete" class="btn btn-danger" id="btnDelete"><span class="glyphicon glyphicon-remove"></span></button> -->
                                             </center>
                                         </td>
                                     </tr>
@@ -208,6 +208,8 @@
                 </div>
 
                   <div class = "modal-footer">
+                    <button type ="button" class = "btn btn-primary" data-dismiss = "modal"> APPROVE </button>
+                    <button type ="button" class = "btn btn-danger" data-dismiss = "modal"> REJECT </button>
                     <button type ="button" class = "btn btn-default" data-dismiss = "modal"> CLOSE </button>
                   </div>
                 </div>
@@ -412,6 +414,8 @@
             });
 
             var table = $('#tblhouses').DataTable();
+
+            $('[data-toggle="tooltip"]').tooltip();
             
             $(document).on('click', '#btnViewDetails', function(){
                 $('#modalViewDetails').modal('show');

@@ -78,7 +78,10 @@
                     <a href="index?route=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="index?route=applicants"><i class="fa fa-plus-square fa-fw"></i> Applicants</a>
+                    <a href="index?route=applicants"><i class="fa fa-plus-square fa-fw"></i> Host Applicants</a>
+                </li>
+                <li>
+                    <a href="index?route=applyhouses"><i class="fa fa-home fa-fw"></i> Apartment Applications</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-group fa-fw"></i> Hosts<span class="fa arrow"></span></a>
@@ -92,13 +95,13 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-home fa-fw"></i> Houses<span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-home fa-fw"></i> Apartments<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="index?route=ahouses">Current Houses</a>
+                            <a href="index?route=ahouses">Current Apartments</a>
                         </li>
                         <li>
-                            <a href="index?route=rhouses">Rejected Houses</a>
+                            <a href="index?route=rhouses">Rejected Apartments</a>
                         </li>
                     </ul>
                 </li>

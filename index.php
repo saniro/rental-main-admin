@@ -26,6 +26,9 @@
 		case 'rhouses':
 			require("view/ma_rhouses.php");
 			break;
+		case 'applyhouses':
+			require("view/ma_applyhouses.php");
+			break;
 		case 'notifications':
 			require("view/ma_notifications.php");
 			break;
