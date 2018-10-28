@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['admin_id'])){
+    if(isset($_SESSION['m_admin_id'])){
         header("location:index?route=dashboard");
     }
 ?>
@@ -91,7 +91,7 @@
                         var data = JSON.parse(data);
 
                         if(data.success == "true"){
-                            alert("Welcome " + data.first_name + "!");
+                            alert("Welcome " + data.name + "!");
                             window.location.href = "index?route=dashboard";
                         }
                         else if(data.success == "false"){

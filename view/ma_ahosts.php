@@ -1,5 +1,5 @@
 <?php
-    if(!isset($_SESSION['admin_id'])){
+    if(!isset($_SESSION['m_admin_id'])){
         header("location:index");
     }
 ?>
@@ -55,27 +55,32 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Birthdate</th>
-                                        <th>Gender</th>
                                         <th>Contact No.</th>
                                         <th>Email</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <tr class="odd gradeX">
-                                            <td>1</td>
-                                            <td>Sample S. Sample</td>
-                                            <td>January 03, 1992</td>
-                                            <td>Unknown Specie</td>
-                                            <td>09212461703</td>
-                                            <td>sample@gmail.com</td>
-                                            <td class="center">
-                                                <button data-toggle="tooltip" title="View Full Details" class="btn btn-info btn_details" id = "btnDetails"><span class="fa fa-file-text-o"></span></button>
-                                                <button data-toggle="tooltip" title="Edit" class="btn btn-success btn_edit" id="btnEdit"><span class="fa fa-edit"></span></button>
-                                                <button data-toggle="tooltip" title="Delete" class="btn btn-danger" id="btnDelete"><span class="glyphicon glyphicon-trash"></span></button>
-                                            </td>
-                                        </tr>
+                                <?php
+                                    $current_host = current_host();
+                                    $current_host = json_decode($current_host);
+
+                                    foreach ($current_host as $value) {
+                                    ?>
+                                    <tr class="odd gradeX">
+                                        <td><?php echo $value -> {'host_id'}; ?></td>
+                                        <td><?php echo $value -> {'name'}; ?></td>
+                                        <td><?php echo $value -> {'contact_no'}; ?></td>
+                                        <td><?php echo $value -> {'email'}; ?></td>
+                                        <td class="center">
+                                            <button data-toggle="tooltip" title="View Full Details" class="btn btn-info btn_details" id = "btnDetails" data-id="<?php echo $value -> {'host_id'}; ?>"><span class="fa fa-file-text-o"></span></button>
+                                            <button data-toggle="tooltip" title="Edit" class="btn btn-success btn_edit" id="btnEdit" data-id="<?php echo $value -> {'host_id'}; ?>"><span class="fa fa-edit"></span></button>
+                                            <button data-toggle="tooltip" title="Delete" class="btn btn-danger" id="btnDelete" data-id="<?php echo $value -> {'host_id'}; ?>"><span class="glyphicon glyphicon-trash"></span></button>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    }
+                                ?>
                                 </tbody>
                             </table>
                         </div>
@@ -112,23 +117,23 @@
                                     <form>
                                         <div class="form-group">
                                             <label> Contact Person: </label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_name"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Birthdate:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_birthdate"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_gender"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Contact No:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_contactno"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Email:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_email"></label>
                                         </div>
                                     </form>
                                 </form>
@@ -211,36 +216,36 @@
                 </div>
                 <div class="modal-body">
                     &emsp; &emsp; By clicking yes, this host record will be removed and all records related will be deleted from this platform.
-                                <form>    
-                                    <center>
-                                            <img src="" alt="Host Profile Picture">
-                                    </center>
-                                    <form>
-                                        <div class="form-group">
-                                            <label> Host Name: </label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Birthdate:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Gender:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Contact No:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Email:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                    </form>
-                                </form>
+                    <form>    
+                        <center>
+                                <img src="" alt="Host Profile Picture">
+                        </center>
+                        <form>
+                            <div class="form-group">
+                                <label> Host Name: </label>
+                                <label class="form-control" id="d_name"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Birthdate:</label>
+                                <label class="form-control" id="d_birthdate"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender:</label>
+                                <label class="form-control" id="d_gender"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact No:</label>
+                                <label class="form-control" id="d_contactno"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <label class="form-control" id="d_email"></label>
+                            </div>
+                        </form>
+                    </form>
                 </div>
                 <div class = "modal-footer">
-                    <button type="button" class = "btn btn-primary" data-dismiss = "modal"> YES </button>
+                    <button type="button" class = "btn btn-primary" data-dismiss = "modal" id="SubmitDelete"> YES </button>
                     <button type ="button" class = "btn btn-danger" data-dismiss = "modal"> NO </button>
                 </div>
             </div>
@@ -279,7 +284,39 @@
 
             
             $(document).on('click', '#btnDetails', function(){
-                $('#modalDetails').modal('show');
+                var view_host_details = 'selected';
+                var host_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_host_details_data: view_host_details,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#v_name').html(data.name);
+                            $('#v_birthdate').html(data.birthdate);
+                            $('#v_gender').html(data.gender);
+                            $('#v_contactno').html(data.contact_no);
+                            $('#v_email').html(data.email);
+
+                            //$('#SubmitUpdate').attr('data-id', data.tnc_id);
+                            $('#modalDetails').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
             
             $(document).on('click', '#btnEdit', function(){
@@ -287,7 +324,68 @@
             });
             
             $(document).on('click', '#btnDelete', function(){
-                $('#modalDelete').modal('show');
+                var view_host_details = 'selected';
+                var host_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_host_details_data: view_host_details,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#d_name').html(data.name);
+                            $('#d_birthdate').html(data.birthdate);
+                            $('#d_gender').html(data.gender);
+                            $('#d_contactno').html(data.contact_no);
+                            $('#d_email').html(data.email);
+
+                            $('#SubmitDelete').attr('data-id', data.host_id);
+                            $('#modalDelete').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
+            });
+
+            $(document).on('click', '#SubmitDelete', function(){
+                var view_delete_details = 'selected';
+                var host_id = $(this).attr('data-id');
+                // table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/update_function.php',
+                    method: 'POST',
+                    data: {
+                        view_host_delete_data: view_host_delete,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            alert(data.message);
+                            //$('#SubmitUpdate').attr('data-id', data.tnc_id);
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
 
             // $(document).on('click', '#btnDetails', function(){

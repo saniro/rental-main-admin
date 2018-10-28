@@ -1,15 +1,59 @@
 <?php
 
-	function room_check($room_id){
+	function all_applicants(){
 		require("./connection/connection.php");
-		$query = "SELECT rental_id FROM rental_tbl WHERE room_id = :room_id AND status = 1";
+		$query = "SELECT host_id, concat(last_name, ', ', first_name, ' ', middle_name) AS name, contact_no, email FROM host_tbl WHERE status = 2";
 		$stmt = $con->prepare($query);
-		$stmt->bindParam(':room_id', $room_id, PDO::PARAM_INT);
 		$stmt->execute();
-		//$results = $stmt->fetchAll();
+		$results = $stmt->fetchAll();
 		$rowCount = $stmt->rowCount();
-		return $rowCount;
+		$results = json_encode($results);
+		return $results;
 	}
+
+	function rejected_host(){
+		require("./connection/connection.php");
+		$query = "SELECT host_id, concat(last_name, ', ', first_name, ' ', middle_name) AS name, contact_no, email FROM host_tbl WHERE status = 0";
+		$stmt = $con->prepare($query);
+		$stmt->execute();
+		$results = $stmt->fetchAll();
+		$rowCount = $stmt->rowCount();
+		$results = json_encode($results);
+		return $results;
+	}
+
+	function current_host(){
+		require("./connection/connection.php");
+		$query = "SELECT host_id, concat(last_name, ', ', first_name, ' ', middle_name) AS name, contact_no, email FROM host_tbl WHERE status = 1 AND flag = 1";
+		$stmt = $con->prepare($query);
+		$stmt->execute();
+		$results = $stmt->fetchAll();
+		$rowCount = $stmt->rowCount();
+		$results = json_encode($results);
+		return $results;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	function all_tenants(){
 		require("./connection/connection.php");

@@ -1,5 +1,5 @@
 <?php
-    if(!isset($_SESSION['admin_id'])){
+    if(!isset($_SESSION['m_admin_id'])){
         header("location:index");
     }
 ?>

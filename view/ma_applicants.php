@@ -1,9 +1,7 @@
 <?php
-    if(!isset($_SESSION['admin_id'])){
+    if(!isset($_SESSION['m_admin_id'])){
         header("location:index");
     }
-?>
-<?php
     require("functions/select_all_function.php");
 ?>
 <!DOCTYPE html>
@@ -55,27 +53,32 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Birthdate</th>
-                                        <th>Gender</th>
                                         <th>Contact No.</th>
                                         <th>Email</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <tr class="odd gradeX">
-                                            <td>1</td>
-                                            <td>Sample S. Sample</td>
-                                            <td>January 03, 1992</td>
-                                            <td>Unknown Specie</td>
-                                            <td>09212461703</td>
-                                            <td>sample@gmail.com</td>
-                                            <td class="center">
-                                                <button data-toggle="tooltip" title="View Full Details" class="btn btn-info btn_details" id = "btnDetails"><span class="fa fa-file-text-o"></span></button>
-                                                <button data-toggle="tooltip" title="Approve" class="btn btn-success btn_edit" id="btnApprove"><span class="fa fa-check"></span></button>
-                                                <button data-toggle="tooltip" title="Reject" class="btn btn-danger" id="btnReject"><span class="fa fa-times"></span></button>
-                                            </td>
-                                        </tr>
+                                <?php
+                                    $all_applicants = all_applicants();
+                                    $all_applicants = json_decode($all_applicants);
+
+                                    foreach ($all_applicants as $value) {
+                                    ?>
+                                    <tr class="odd gradeX">
+                                        <td><?php echo $value -> {'host_id'}; ?></td>
+                                        <td><?php echo $value -> {'name'}; ?></td>
+                                        <td><?php echo $value -> {'contact_no'}; ?></td>
+                                        <td><?php echo $value -> {'email'}; ?></td>
+                                        <td class="center">
+                                            <button data-toggle="tooltip" title="View Full Details" class="btn btn-info btn_details" id = "btnDetails" data-id="<?php echo $value -> {'host_id'}; ?>"><span class="fa fa-file-text-o"></span></button>
+                                            <button data-toggle="tooltip" title="Approve" class="btn btn-success btn_edit" id="btnApprove" data-id="<?php echo $value -> {'host_id'}; ?>"><span class="fa fa-check"></span></button>
+                                            <button data-toggle="tooltip" title="Reject" class="btn btn-danger" id="btnReject" data-id="<?php echo $value -> {'host_id'}; ?>"><span class="fa fa-times"></span></button>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    }
+                                ?>
                                 </tbody>
                             </table>
                         </div>
@@ -95,48 +98,47 @@
 
 
  <!-- modalDetails -->
-      <div class = "modal fade" id = "modalDetails" role = "dialog">
+    <div class = "modal fade" id = "modalDetails" role = "dialog">
         <div class = "modal-dialog">
-
           <div class="modal-content">
             <div class = "modal-header">
               <button type="button" class = "close" data-dismiss ="modal"> &times;</button>
                     <h4 class ="modal-title"> New Host Applicant Details </h4>
                   </div>
                   <div class="modal-body">
-                                <center><br><h4>Host</h4></center>
-                                <form>    
-                                    <center>
-                                            <img src="" alt="Host Applicant Profile Picture">
-                                    </center>
-                                    <form>
-                                        <div class="form-group">
-                                            <label> Name: </label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Birthdate:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Gender:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Contact No:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Email:</label>
-                                            <label class="form-control"></label>
-                                        </div>
-                                    </form>
-                                </form>
+                    <center><br><h4>Host</h4></center>
+                    <form>    
+                        <center>
+                                <img src="" alt="Host Applicant Profile Picture">
+                        </center>
+                        <form>
+                            <div class="form-group">
+                                <label> Name: </label>
+                                <label class="form-control" id="v_name"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Birthdate:</label>
+                                <label class="form-control" id="v_birthdate"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender:</label>
+                                <label class="form-control" id="v_gender"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact No:</label>
+                                <label class="form-control" id="v_contactno"></label>
+                            </div>
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <label class="form-control" id="v_email"></label>
+                            </div>
+                        </form>
+                    </form>
                 </div>
 
-                  <div class = "modal-footer">
+                <div class = "modal-footer">
                     <button type ="button" class = "btn btn-default" data-dismiss = "modal"> CLOSE </button>
-                  </div>
+                </div>
                 </div>
           </div>
         </div>
@@ -163,30 +165,30 @@
                                     <form>
                                         <div class="form-group">
                                             <label> Name: </label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="a_name"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Birthdate:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="a_birthdate"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="a_gender"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Contact No:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="a_contactno"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Email:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="a_email"></label>
                                         </div>
                                     </form>
                                 </form>
                 </div>
 
                   <div class = "modal-footer">
-                    <button type ="button" class = "btn btn-primary" data-dismiss = "modal"> APPROVE </button>
+                    <button type ="button" class = "btn btn-primary" data-dismiss = "modal" id="SubmitApprove"> APPROVE </button>
                     <button type ="button" class = "btn btn-default" data-dismiss = "modal"> CLOSE </button>
                   </div>
                 </div>
@@ -216,30 +218,30 @@
                                     <form>
                                         <div class="form-group">
                                             <label> Name: </label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="r_name"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Birthdate:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="r_birthdate"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="r_gender"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Contact No:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="r_contactno"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Email:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="r_email"></label>
                                         </div>
                                     </form>
                                 </form>
                 </div>
 
                   <div class = "modal-footer">
-                    <button type ="button" class = "btn btn-danger" data-dismiss = "modal"> REJECT </button>
+                    <button type ="button" class = "btn btn-danger" data-dismiss = "modal" id="SubmitReject"> REJECT </button>
                     <button type ="button" class = "btn btn-default" data-dismiss = "modal"> CLOSE </button>
                   </div>
                 </div>
@@ -378,22 +380,172 @@
                 responsive: true
             });
 
-            // var table = $('#tblapplicants').DataTable();
-            // var table_row;
+            var table = $('#tblapplicants').DataTable();
+            var table_row;
             
             $('[data-toggle="tooltip"]').tooltip();
 
             
             $(document).on('click', '#btnDetails', function(){
-                $('#modalDetails').modal('show');
+                var view_applicants_details = 'selected';
+                var host_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_applicants_details_data: view_applicants_details,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#v_name').html(data.name);
+                            $('#v_birthdate').html(data.birthdate);
+                            $('#v_gender').html(data.gender);
+                            $('#v_contactno').html(data.contact_no);
+                            $('#v_email').html(data.email);
+
+                            //$('#SubmitUpdate').attr('data-id', data.tnc_id);
+                            $('#modalDetails').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
             
             $(document).on('click', '#btnApprove', function(){
-                $('#modalApprove').modal('show');
+                var view_applicants_details = 'selected';
+                var host_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_applicants_details_data: view_applicants_details,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#a_name').html(data.name);
+                            $('#a_birthdate').html(data.birthdate);
+                            $('#a_gender').html(data.gender);
+                            $('#a_contactno').html(data.contact_no);
+                            $('#a_email').html(data.email);
+
+                            $('#SubmitApprove').attr('data-id', data.host_id);
+                            $('#modalApprove').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
             
+            $(document).on('click', '#SubmitApprove', function(){
+                var submit_approved_applicant = 'selected';
+                var host_id = $(this).attr('data-id');
+                // table_row = $(this).parents('tr');
+                $.ajax({
+                    url: 'functions/update_function.php',
+                    method: 'POST',
+                    data: {
+                        submit_approved_applicant_data: submit_approved_applicant,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+                        if(data.success == "true"){
+                            table.row( table_row ).remove().draw();
+                            alert(data.message);
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
+            });
+
             $(document).on('click', '#btnReject', function(){
-                $('#modalReject').modal('show');
+                var view_applicants_details = 'selected';
+                var host_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_applicants_details_data: view_applicants_details,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#r_name').html(data.name);
+                            $('#r_birthdate').html(data.birthdate);
+                            $('#r_gender').html(data.gender);
+                            $('#r_contactno').html(data.contact_no);
+                            $('#r_email').html(data.email);
+
+                            $('#SubmitReject').attr('data-id', data.host_id);
+                            $('#modalReject').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
+            });
+
+            $(document).on('click', '#SubmitReject', function(){
+                var submit_reject_applicant = 'selected';
+                var host_id = $(this).attr('data-id');
+                // table_row = $(this).parents('tr');
+                $.ajax({
+                    url: 'functions/update_function.php',
+                    method: 'POST',
+                    data: {
+                        submit_reject_applicant_data: submit_reject_applicant,
+                        host_id_data: host_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+                        if(data.success == "true"){
+                            table.row( table_row ).remove().draw();
+                            alert(data.message);
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
             
             // $(document).on('click', '#btnEdit', function(){
