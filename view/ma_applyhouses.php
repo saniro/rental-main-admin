@@ -84,27 +84,32 @@
                                         <th>Apartment Name</th>
                                         <th>Address</th>
                                         <th>Contact Person</th>
-                                        <th>Contact Number</th>
-                                        <th>Email</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <?php
+                                    $all_applyhouse = all_applyhouse();
+                                    $all_applyhouse = json_decode($all_applyhouse);
+
+                                    foreach ($all_applyhouse as $value) {
+                                    ?>
                                     <tr class="odd gradeX">
-                                        <td>1</td>
-                                        <td>apartmentname</td>
-                                        <td>chuchu st. chenes, chuvanes city</td>
-                                        <td>Chichi Ria</td>
-                                        <td>09653985214</td>
-                                        <td>chichiria@gmail.com</td>
+                                        <td><?php echo $value -> {'apartment_id'}; ?></td>
+                                        <td><?php echo $value -> {'apartment_name'}; ?></td>
+                                        <td><?php echo $value -> {'apartment_address'}; ?></td>
+                                        <td><?php echo $value -> {'host'}; ?></td>
                                         <td class="center">
                                             <center>
-                                                <button data-toggle="tooltip" title="View Details and See More Available Actions Here" class="btn btn-info" id="btnViewDetails"><span class="fa fa-file-text-o"></span></button>
+                                                <button data-toggle="tooltip" title="View Details and See More Available Actions Here" class="btn btn-info" id="btnViewDetails" data-id="<?php echo $value -> {'apartment_id'}; ?>"><span class="fa fa-file-text-o"></span></button>
                                                 <!-- <button data-toggle="tooltip" title="Edit Details" class="btn btn-success" id="btnEdit"><span class="fa fa-edit"></span></button>
                                                 <button data-toggle="tooltip" title="Delete" class="btn btn-danger" id="btnDelete"><span class="glyphicon glyphicon-remove"></span></button> -->
                                             </center>
                                         </td>
                                     </tr>
+                                    <?php
+                                    }
+                                ?>
                                 </tbody>
                             </table>
                         </div>
@@ -156,19 +161,19 @@
                                     <form>
                                         <div class="form-group">
                                             <label>ID:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_apartment_id"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Apartment Name:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_apartment_name"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Address:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_address"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Description:</label>
-                                            <textarea class="form-control" disabled="true"></textarea>
+                                            <textarea class="form-control" disabled="true" id="v_description"></textarea>
                                         </div>
                                     </form>
                                 </form>
@@ -182,23 +187,23 @@
                                     <form>
                                         <div class="form-group">
                                             <label> Contact Person: </label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_contact"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Birthdate:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_birth"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_gender"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Contact No:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_number"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Email:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_email"></label>
                                         </div>
                                     </form>
                                 </form>
@@ -208,8 +213,8 @@
                 </div>
 
                   <div class = "modal-footer">
-                    <button type ="button" class = "btn btn-primary" data-dismiss = "modal"> APPROVE </button>
-                    <button type ="button" class = "btn btn-danger" data-dismiss = "modal"> REJECT </button>
+                    <button type ="button" class = "btn btn-primary" data-dismiss = "modal" id="SubmitApprove"> APPROVE </button>
+                    <button type ="button" class = "btn btn-danger" data-dismiss = "modal" id="SubmitReject"> REJECT </button>
                     <button type ="button" class = "btn btn-default" data-dismiss = "modal"> CLOSE </button>
                   </div>
                 </div>
@@ -418,9 +423,133 @@
             $('[data-toggle="tooltip"]').tooltip();
             
             $(document).on('click', '#btnViewDetails', function(){
-                $('#modalViewDetails').modal('show');
+                var view_apartment_application = 'selected';
+                var apartment_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_apartment_application_data: view_apartment_application,
+                        apartment_id_data: apartment_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#v_apartment_id').html(data.apartment_id);
+                            $('#v_apartment_name').html(data.apartment_name);
+                            $('#v_address').html(data.address);
+                            $('#v_description').html(data.description);
+
+                            $('#v_contact').html(data.name);
+                            $('#v_birth').html(data.birth);
+                            $('#v_gender').html(data.gender);
+                            $('#v_number').html(data.contact_no);
+                            $('#v_email').html(data.email);
+
+                            $('#SubmitApprove').attr('data-id', data.apartment_id);
+                            $('#SubmitReject').attr('data-id', data.apartment_id);
+                            $('#modalViewDetails').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
             
+            $(document).on('click', '#SubmitApprove', function(){
+                var submit_approve_application = 'selected';
+                var apartment_id = $(this).attr('data-id');
+
+                $.ajax({
+                    url: 'functions/update_function.php',
+                    method: 'POST',
+                    data: {
+                        submit_approve_application_data: submit_approve_application,
+                        apartment_id_data: apartment_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            table.row( table_row ).remove().draw();
+                            alert(data.message);
+                            // $('#v_apartment_id').html(data.apartment_id);
+                            // $('#v_apartment_name').html(data.apartment_name);
+                            // $('#v_address').html(data.address);
+                            // $('#v_description').html(data.description);
+
+                            // $('#v_contact').html(data.name);
+                            // $('#v_birth').html(data.birth);
+                            // $('#v_gender').html(data.gender);
+                            // $('#v_number').html(data.contact_no);
+                            // $('#v_email').html(data.email);
+
+                            // $('#SubmitApprove').attr('data-id', data.apartment_id);
+                            // $('#SubmitReject').attr('data-id', data.apartment_id);
+                            // $('#modalViewDetails').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
+            });
+
+            $(document).on('click', '#SubmitReject', function(){
+                var submit_reject_application = 'selected';
+                var apartment_id = $(this).attr('data-id');
+
+                $.ajax({
+                    url: 'functions/update_function.php',
+                    method: 'POST',
+                    data: {
+                        submit_reject_application_data: submit_reject_application,
+                        apartment_id_data: apartment_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            table.row( table_row ).remove().draw();
+                            alert(data.message);
+                            // $('#v_apartment_id').html(data.apartment_id);
+                            // $('#v_apartment_name').html(data.apartment_name);
+                            // $('#v_address').html(data.address);
+                            // $('#v_description').html(data.description);
+
+                            // $('#v_contact').html(data.name);
+                            // $('#v_birth').html(data.birth);
+                            // $('#v_gender').html(data.gender);
+                            // $('#v_number').html(data.contact_no);
+                            // $('#v_email').html(data.email);
+
+                            // $('#SubmitApprove').attr('data-id', data.apartment_id);
+                            // $('#SubmitReject').attr('data-id', data.apartment_id);
+                            // $('#modalViewDetails').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
+            });
+
             $(document).on('click', '#btnEdit', function(){
                 $('#modalEdit').modal('show');
             });
@@ -428,332 +557,6 @@
             $(document).on('click', '#btnDelete', function(){
                 $('#modalDelete').modal('show');
             });
-
-        //     $(document).on('click', '#SubmitAdd', function(){
-        //         var add_room = 'selected';
-        //         var room_name = $('#a_room_name').val();
-        //         var rent_rate = $('#a_rent_rate').val();
-        //         var description = $('#a_description').val();
-
-        //         $.ajax({
-        //             url: 'functions/insert_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 add_room_data: add_room,
-        //                 room_name_data: room_name,
-        //                 rent_rate_data: rent_rate,
-        //                 description_data: description
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-                            
-        //                     table.row.add( [
-        //                         data.room_id,
-        //                         data.room_name,
-        //                         data.rent_rate,
-        //                         data.description,
-        //                         data.status,
-        //                         data.buttons
-        //                     ] ).draw( false );
-        //                     alert(data.message);
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#btnDelete', function(){
-        //         var view_delete_room = 'selected';
-        //         var room_id = $(this).attr('data-id');
-        //         table_row = $(this).parents('tr');
-
-        //         $.ajax({
-        //             url: 'functions/select_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 view_delete_room_data: view_delete_room,
-        //                 room_id_data: room_id
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     $("#v_d_room_id").html(data.room_id);
-        //                     $("#v_d_room_name").html(data.room_name);
-
-        //                     $('#SubmitDelete').attr('data-id', room_id);
-        //                     $('#modalDelete').modal('show');
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#SubmitDelete', function(){
-        //         var room_id = $(this).attr('data-id');
-        //         var submit_delete_room = 'selected';
-
-        //         $.ajax({
-        //             url: 'functions/delete_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 submit_delete_room_data: submit_delete_room,
-        //                 room_id_data: room_id
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     table.row( table_row ).remove().draw();
-        //                     alert(data.message);
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#btnViewDetails', function(){
-        //         var room_id = $(this).attr('data-id');
-        //         var view_room_details_check = 'selected';
-        //         table_row = $(this).parents('tr');
-                
-        //         $.ajax({
-        //             url: 'functions/select_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 view_room_details_check_data: view_room_details_check,
-        //                 room_id_data: room_id
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     if(data.status == "occupied"){
-        //                         $("#o_room_id").html(data.room_id);
-        //                         $("#o_room_name").html(data.room_name);
-        //                         $("#o_rent_rate").html(data.rent_rate);
-        //                         $("#o_room_description").html(data.room_description);
-
-        //                         $("#o_user_id").html(data.user_id);
-        //                         $("#o_name").html(data.name);
-        //                         $("#o_birthdate").html(data.birth_date);
-        //                         $("#o_gender").html(data.gender);
-        //                         $("#o_contactno").html(data.contact_no);
-        //                         $("#o_email").html(data.email);
-        //                         $("#btnTerminate").attr('data-id', data.rental_id);
-
-        //                         $('#modalOccupiedRoom').modal('show');
-        //                     }
-        //                     else if(data.status == "vacant"){
-        //                         $('#v_room_id').html(data.room_id);
-        //                         $('#v_room_name').html(data.room_name);
-        //                         $('#v_rent_rate').html(data.rent_rate);
-        //                         $('#v_room_description').html(data.room_description);
-
-        //                         $('#AddTenantSubmit').attr('data-id', data.room_id);
-        //                         $('#modalVacantRoom').modal('show');
-        //                     }
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#btnEdit', function(){
-        //         var room_id = $(this).attr('data-id');
-        //         var view_edit_room = 'selected';
-        //         table_row = $(this).parents('tr');
-
-        //         $.ajax({
-        //             url: 'functions/select_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 view_edit_room_data: view_edit_room,
-        //                 room_id_data: room_id
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     $("#e_room_id").html(data.room_id);
-        //                     $("#e_room_name").val(data.room_name);
-        //                     $("#e_room_rate").val(data.room_rate);
-        //                     $("#e_rent_rate").val(data.rent_rate);
-        //                     $("#e_room_description").val(data.room_description);
-        //                     $("#e_status").html(data.status);
-        //                     $("#SubmitUpdate").attr('data-id', data.room_id);
-        //                     $('#modalEditRoomDetails').modal('show');
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#SubmitUpdate', function(){
-        //         var room_id = $(this).attr('data-id');
-        //         var update_room_details = 'selected';
-        //         var room_name =  $("#e_room_name").val();
-        //         var rent_rate = $("#e_rent_rate").val();
-        //         var room_description = $("#e_room_description").val();
-
-        //         $.ajax({
-        //             url: 'functions/update_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 update_room_details_data: update_room_details,
-        //                 room_id_data: room_id,
-        //                 room_name_data: room_name,
-        //                 rent_rate_data: rent_rate,
-        //                 room_description_data: room_description
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     var rData = [ data.room_id, data.room_name, data.rent_rate, data.room_description, data.status, data.buttons];
-        //                     table.row( table_row ).data(rData).draw();
- 
-        //                     alert(data.message);
-        //                     $('#modalEditRoomDetails').modal('toggle');
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     if(data.error == "minor"){
-        //                         alert(data.message);
-        //                     }
-        //                     else{
-        //                         alert(data.message);
-        //                         $('#modalEditRoomDetails').modal('toggle');
-        //                     }
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#btnTerminate', function(){
-        //         var view_terminate_details = 'selected';
-        //         var rental_id = $(this).attr('data-id');
-
-        //         $.ajax({
-        //             url: 'functions/select_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 view_terminate_details_data: view_terminate_details,
-        //                 rental_id_data: rental_id
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     $('#c_room_name').html(data.room_name);
-        //                     $('#c_name').html(data.name);
-        //                     $('#SubmitTerminate').attr('data-id', data.rental_id);
-        //                     $('#modalTerminate').modal('show');
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#SubmitTerminate', function(){
-        //         var rental_terminate_table = 'selected';
-        //         var rental_id = $(this).attr('data-id');
-
-        //         $.ajax({
-        //             url: 'functions/delete_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 rental_terminate_table_data: rental_terminate_table,
-        //                 rental_id_data: rental_id
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     var rData = [ data.room_id, data.room_name, data.rent_rate, data.room_description, data.status, data.buttons];
-        //                     table.row( table_row ).data(rData).draw();
-        //                     alert(data.message);
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $(document).on('click', '#AddTenantSubmit', function(){
-        //         var add_tenant_table = 'selected';
-        //         var room_id = $(this).attr('data-id');
-        //         var first_name = $('#a_first_name').val();
-        //         var middle_name = $('#a_middle_name').val();
-        //         var last_name = $('#a_last_name').val();
-        //         var birth_date = $('#a_birth_date').val();
-        //         var gender = $('#a_gender').val();
-        //         var contactno = $('#a_contactno').val();
-        //         var email = $('#a_email').val();
-
-        //         $.ajax({
-        //             url: 'functions/insert_function.php',
-        //             method: 'POST',
-        //             data: {
-        //                 add_tenant_table_data: add_tenant_table,
-        //                 room_id_data: room_id,
-        //                 first_name_data: first_name,
-        //                 middle_name_data:  middle_name,
-        //                 last_name_data: last_name,
-        //                 birth_date_data: birth_date,
-        //                 gender_data: gender,
-        //                 contactno_data: contactno,
-        //                 email_data: email
-        //             },
-        //             success: function(data) {
-        //                 var data = JSON.parse(data);
-        //                 if(data.success == "true"){
-        //                     var rData = [ data.room_id, data.room_name, data.rent_rate, data.room_description, data.status, data.buttons];
-        //                     table.row( table_row ).data(rData).draw();
-        //                     $('#modalVacantRoom').modal('toggle');
-        //                     alert(data.message);
-        //                 }
-        //                 else if (data.success == "false"){
-        //                     alert(data.message);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 console.log(xhr.status + ":" + xhr.statusText);
-        //             }
-        //         });
-        //     });
-
-        //     $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 </body>

@@ -107,6 +107,114 @@
 		}
 	}
 
+	//ma_ahouses.php apartment detail
+	if(isset($_POST['view_apartment_details_data'])){
+		$apartment_id = $_POST['apartment_id_data'];
+		
+		if($apartment_id != NULL){
+			$query_check = "SELECT apartment_id FROM apartment_tbl WHERE apartment_id = :apartment_id AND status = 1 AND flag = 1";
+			$stmt = $con->prepare($query_check);
+			$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+			$stmt->execute();
+			$row = $stmt->fetch();
+			$rowCount = $stmt->rowCount();
+			if($rowCount > 0){
+				$query = "SELECT *, (SELECT concat(last_name, ', ', first_name, ' ', middle_name) FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS name, (SELECT DATE_FORMAT(birth_date, '%M %d, %Y') FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS birth_date, (SELECT (CASE WHEN gender = 1 THEN 'Male' WHEN gender = 0 THEN 'Female' END) FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS gender, (SELECT contact_no FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS contact_no, (SELECT email FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS email FROM apartment_tbl AS AT WHERE apartment_id = :apartment_id";
+				$stmt = $con->prepare($query);
+				$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+				$stmt->execute();
+				$row = $stmt->fetch();
+
+				$data = array("success" => "true", "apartment_id" => $row['apartment_id'], "apartment_name" => $row['apartment_name'], "description" => $row['apartment_desc'], "address" => $row['apartment_address'], "name" => $row['name'], "birth" => $row['birth_date'], "contact_no" => $row['contact_no'], "email" => $row['email'], "gender" => $row['gender'], "contact_no" => $row['contact_no']);
+				$results = json_encode($data);
+				echo $results;
+			}
+			else{
+				$data = array("success" => "false", "message" => "Something went wrong. Please try again.");
+				$results = json_encode($data);
+				echo $results;
+			}
+		}
+		else{
+			$data = array("success" => "false", "message" => "Required fields must not be empty.");
+			$results = json_encode($data);
+			echo $results;
+		}
+	}
+
+	//ma_rhouses.php rejected apartment detail
+	if(isset($_POST['view_rejected_apartment_details_data'])){
+		$apartment_id = $_POST['apartment_id_data'];
+		
+		if($apartment_id != NULL){
+			$query_check = "SELECT apartment_id FROM apartment_tbl WHERE apartment_id = :apartment_id AND status = 0 AND flag = 0";
+			$stmt = $con->prepare($query_check);
+			$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+			$stmt->execute();
+			$row = $stmt->fetch();
+			$rowCount = $stmt->rowCount();
+			if($rowCount > 0){
+				$query = "SELECT *, (SELECT concat(last_name, ', ', first_name, ' ', middle_name) FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS name, (SELECT DATE_FORMAT(birth_date, '%M %d, %Y') FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS birth_date, (SELECT (CASE WHEN gender = 1 THEN 'Male' WHEN gender = 0 THEN 'Female' END) FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS gender, (SELECT contact_no FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS contact_no, (SELECT email FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS email FROM apartment_tbl AS AT WHERE apartment_id = :apartment_id";
+				$stmt = $con->prepare($query);
+				$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+				$stmt->execute();
+				$row = $stmt->fetch();
+
+				$data = array("success" => "true", "apartment_id" => $row['apartment_id'], "apartment_name" => $row['apartment_name'], "description" => $row['apartment_desc'], "address" => $row['apartment_address'], "name" => $row['name'], "birth" => $row['birth_date'], "contact_no" => $row['contact_no'], "email" => $row['email'], "gender" => $row['gender'], "contact_no" => $row['contact_no']);
+				$results = json_encode($data);
+				echo $results;
+			}
+			else{
+				$data = array("success" => "false", "message" => "Something went wrong. Please try again.");
+				$results = json_encode($data);
+				echo $results;
+			}
+		}
+		else{
+			$data = array("success" => "false", "message" => "Required fields must not be empty.");
+			$results = json_encode($data);
+			echo $results;
+		}
+	}
+
+	//ma_applyhouse.php apply apartment detail
+	if(isset($_POST['view_apartment_application_data'])){
+		$apartment_id = $_POST['apartment_id_data'];
+		
+		if($apartment_id != NULL){
+			$query_check = "SELECT apartment_id FROM apartment_tbl WHERE apartment_id = :apartment_id AND status = 2 AND flag = 1";
+			$stmt = $con->prepare($query_check);
+			$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+			$stmt->execute();
+			$row = $stmt->fetch();
+			$rowCount = $stmt->rowCount();
+			if($rowCount > 0){
+				$query = "SELECT *, (SELECT concat(last_name, ', ', first_name, ' ', middle_name) FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS name, (SELECT DATE_FORMAT(birth_date, '%M %d, %Y') FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS birth_date, (SELECT (CASE WHEN gender = 1 THEN 'Male' WHEN gender = 0 THEN 'Female' END) FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS gender, (SELECT contact_no FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS contact_no, (SELECT email FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS email FROM apartment_tbl AS AT WHERE apartment_id = :apartment_id";
+				$stmt = $con->prepare($query);
+				$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+				$stmt->execute();
+				$row = $stmt->fetch();
+
+				$data = array("success" => "true", "apartment_id" => $row['apartment_id'], "apartment_name" => $row['apartment_name'], "description" => $row['apartment_desc'], "address" => $row['apartment_address'], "name" => $row['name'], "birth" => $row['birth_date'], "contact_no" => $row['contact_no'], "email" => $row['email'], "gender" => $row['gender'], "contact_no" => $row['contact_no']);
+				$results = json_encode($data);
+				echo $results;
+			}
+			else{
+				$data = array("success" => "false", "message" => "Something went wrong. Please try again.");
+				$results = json_encode($data);
+				echo $results;
+			}
+		}
+		else{
+			$data = array("success" => "false", "message" => "Required fields must not be empty.");
+			$results = json_encode($data);
+			echo $results;
+		}
+	}
+
+
+
+
 
 
 

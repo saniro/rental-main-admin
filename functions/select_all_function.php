@@ -33,6 +33,39 @@
 		return $results;
 	}
 
+	function current_apartments(){
+		require("./connection/connection.php");
+		$query = "SELECT apartment_id, apartment_name, apartment_address, (SELECT concat(last_name, ', ', middle_name, ' ', middle_name) AS host FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS host FROM apartment_tbl AS AT WHERE status = 1 AND flag = 1";
+		$stmt = $con->prepare($query);
+		$stmt->execute();
+		$results = $stmt->fetchAll();
+		$rowCount = $stmt->rowCount();
+		$results = json_encode($results);
+		return $results;
+	}
+
+	function rejected_apartments(){
+		require("./connection/connection.php");
+		$query = "SELECT apartment_id, apartment_name, apartment_address, (SELECT concat(last_name, ', ', middle_name, ' ', middle_name) AS host FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS host FROM apartment_tbl AS AT WHERE status = 0 AND flag = 0";
+		$stmt = $con->prepare($query);
+		$stmt->execute();
+		$results = $stmt->fetchAll();
+		$rowCount = $stmt->rowCount();
+		$results = json_encode($results);
+		return $results;
+	}
+
+	function all_applyhouse(){
+		require("./connection/connection.php");
+		$query = "SELECT apartment_id, apartment_name, apartment_address, (SELECT concat(last_name, ', ', middle_name, ' ', middle_name) AS host FROM host_tbl AS HT WHERE HT.host_id = AT.host_id) AS host FROM apartment_tbl AS AT WHERE status = 2 AND flag = 1";
+		$stmt = $con->prepare($query);
+		$stmt->execute();
+		$results = $stmt->fetchAll();
+		$rowCount = $stmt->rowCount();
+		$results = json_encode($results);
+		return $results;
+	}
+
 
 
 

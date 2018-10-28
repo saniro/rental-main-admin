@@ -122,6 +122,77 @@
 		}
 	}
 
+	//a_apartment.php cancel apartment
+	if(isset($_POST['submit_approve_application_data'])){
+		$apartment_id = $_POST['apartment_id_data'];
+		
+		if($apartment_id != NULL){
+			$query_check = "SELECT apartment_id FROM apartment_tbl WHERE apartment_id = :apartment_id AND status = 2";
+			$stmt = $con->prepare($query_check);
+			$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+			$stmt->execute();
+			$row = $stmt->fetch();
+			$rowCount = $stmt->rowCount();
+			if($rowCount > 0){
+				$query_update = "UPDATE apartment_tbl 
+								SET flag = 1, status = 1  
+								WHERE apartment_id = :apartment_id";
+				$stmt = $con->prepare($query_update);
+				$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+				$stmt->execute();
+
+				$data = array("success" => "true", "message" => "Apartment application approved.");
+				$results = json_encode($data);
+				echo $results;
+			}
+			else{
+				$data = array("success" => "false", "message" => "Something went wrong. Please try again.");
+				$results = json_encode($data);
+				echo $results;
+			}
+		}
+		else{
+			$data = array("success" => "false", "message" => "Required fields must not be empty.");
+			$results = json_encode($data);
+			echo $results;
+		}
+	}
+
+	//a_apartment.php reject application of apartment
+	if(isset($_POST['submit_reject_application_data'])){
+		$apartment_id = $_POST['apartment_id_data'];
+		
+		if($apartment_id != NULL){
+			$query_check = "SELECT apartment_id FROM apartment_tbl WHERE apartment_id = :apartment_id AND status = 2";
+			$stmt = $con->prepare($query_check);
+			$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+			$stmt->execute();
+			$row = $stmt->fetch();
+			$rowCount = $stmt->rowCount();
+			if($rowCount > 0){
+				$query_update = "UPDATE apartment_tbl 
+								SET flag = 0, status = 0  
+								WHERE apartment_id = :apartment_id";
+				$stmt = $con->prepare($query_update);
+				$stmt->bindParam(':apartment_id', $apartment_id, PDO::PARAM_INT);
+				$stmt->execute();
+
+				$data = array("success" => "true", "message" => "Apartment application rejected.");
+				$results = json_encode($data);
+				echo $results;
+			}
+			else{
+				$data = array("success" => "false", "message" => "Something went wrong. Please try again.");
+				$results = json_encode($data);
+				echo $results;
+			}
+		}
+		else{
+			$data = array("success" => "false", "message" => "Required fields must not be empty.");
+			$results = json_encode($data);
+			echo $results;
+		}
+	}
 
 
 

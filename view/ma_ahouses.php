@@ -84,27 +84,30 @@
                                         <th>Apartment Name</th>
                                         <th>Address</th>
                                         <th>Contact Person</th>
-                                        <th>Contact Number</th>
-                                        <th>Email</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <?php
+                                    $current_apartments = current_apartments();
+                                    $current_apartments = json_decode($current_apartments);
+
+                                    foreach ($current_apartments as $value) {
+                                    ?>
                                     <tr class="odd gradeX">
-                                        <td>1</td>
-                                        <td>Apartmentname</td>
-                                        <td>chuchu st. chenes, chuvanes city</td>
-                                        <td>Chichi Ria</td>
-                                        <td>09653985214</td>
-                                        <td>chichiria@gmail.com</td>
+                                        <td><?php echo $value -> {'apartment_id'}; ?></td>
+                                        <td><?php echo $value -> {'apartment_name'}; ?></td>
+                                        <td><?php echo $value -> {'apartment_address'}; ?></td>
+                                        <td><?php echo $value -> {'host'}; ?></td>
                                         <td class="center">
                                             <center>
-                                                <button data-toggle="tooltip" title="View Full Details" class="btn btn-info" id="btnViewDetails"><span class="fa fa-file-text-o"></span></button>
-                                                <button data-toggle="tooltip" title="Edit Details" class="btn btn-success" id="btnEdit"><span class="fa fa-edit"></span></button>
-                                                <button data-toggle="tooltip" title="Delete" class="btn btn-danger" id="btnDelete"><span class="glyphicon glyphicon-remove"></span></button>
+                                                <button data-toggle="tooltip" title="View Full Details" class="btn btn-info" id="btnViewDetails" data-id="<?php echo $value -> {'apartment_id'}; ?>"><span class="fa fa-file-text-o"></span></button>
                                             </center>
                                         </td>
                                     </tr>
+                                    <?php
+                                    }
+                                ?>
                                 </tbody>
                             </table>
                         </div>
@@ -156,19 +159,19 @@
                                     <form>
                                         <div class="form-group">
                                             <label>ID:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_apartment_id"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Apartment Name:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_apartment_name"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Address:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_address"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Description:</label>
-                                            <textarea class="form-control" disabled="true"></textarea>
+                                            <textarea class="form-control" disabled="true" id="v_description"></textarea>
                                         </div>
                                     </form>
                                 </form>
@@ -182,23 +185,23 @@
                                     <form>
                                         <div class="form-group">
                                             <label> Contact Person: </label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_contact"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Birthdate:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_birth"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Gender:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_gender"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Contact No:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_number"></label>
                                         </div>
                                         <div class="form-group">
                                             <label>Email:</label>
-                                            <label class="form-control"></label>
+                                            <label class="form-control" id="v_email"></label>
                                         </div>
                                     </form>
                                 </form>
@@ -414,7 +417,44 @@
             var table = $('#tblhouses').DataTable();
             
             $(document).on('click', '#btnViewDetails', function(){
-                $('#modalViewDetails').modal('show');
+                var view_apartment_details = 'selected';
+                var apartment_id = $(this).attr('data-id');
+                table_row = $(this).parents('tr');
+
+                $.ajax({
+                    url: 'functions/select_function.php',
+                    method: 'POST',
+                    data: {
+                        view_apartment_details_data: view_apartment_details,
+                        apartment_id_data: apartment_id
+                    },
+                    success: function(data) {
+                        var data = JSON.parse(data);
+
+                        if(data.success == "true"){
+                            $('#v_apartment_id').html(data.apartment_id);
+                            $('#v_apartment_name').html(data.apartment_name);
+                            $('#v_address').html(data.address);
+                            $('#v_description').html(data.description);
+
+                            $('#v_contact').html(data.name);
+                            $('#v_birth').html(data.birth);
+                            $('#v_gender').html(data.gender);
+                            $('#v_number').html(data.contact_no);
+                            $('#v_email').html(data.email);
+
+                            //$('#SubmitApprove').attr('data-id', data.host_id);
+                            $('#modalViewDetails').modal('show');
+
+                        }
+                        else if (data.success == "false"){
+                            alert(data.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.status + ":" + xhr.statusText);
+                    }
+                });
             });
             
             $(document).on('click', '#btnEdit', function(){
